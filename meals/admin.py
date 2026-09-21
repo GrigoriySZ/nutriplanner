@@ -21,13 +21,13 @@ class ProductAdmin(admin.ModelAdmin):
                  self.admin_site.admin_view(self.import_excel), 
                  name='product_import'), 
         ]
-        return urls + custom_url
+        return custom_url + urls
     
     def import_excel(self, request):
         if request.method == 'POST':
             form = ExcelInputForm(request.POST, request.FILES)
             if form.is_valid():
-                excel_file = request.FIELS['excel_file']
+                excel_file = request.FILES['excel_file']
                 try:
                     workbook = openpyxl.load_workbook(excel_file)
                     sheet = workbook.active
@@ -37,7 +37,7 @@ class ProductAdmin(admin.ModelAdmin):
                     for row in sheet.iter_rows(min_row=2, values_only=True):
                         if not row or not row[0]:
                             continue
-                        name = str(row[0]).strip
+                        name = str(row[0]).strip()
                         calories = int(row[1])
                         proteins = float(row[2])
                         fats = float(row[3])
@@ -56,7 +56,7 @@ class ProductAdmin(admin.ModelAdmin):
                         f'Вставлено строк: {created_count}', 
                         messages.SUCCESS
                     )
-                    return redirect('admin:product_change_list')
+                    return redirect('admin:meals_product_changelist')
                 except Exception: 
                     self.message_user(
                         request,
