@@ -39,11 +39,11 @@ def remove_from_plan(request, product_id):
     meal_plan = MealPlanSession(request)
     meal_plan.remove(product_id)
     messages.info(request, 'Продукт удален из вашего рациона')
-    return redirect('meal_detail_plan')
+    return redirect('meal_plan_detail')
 
 @require_POST
 def clear_plan(request):
     meal_plan = MealPlanSession(request)
     meal_plan.clear()
     messages.info(request, 'Ваш рацион очищен полностью')
-    return redirect('meal_detail_plan')
+    return redirect('meal_plan_detail')
