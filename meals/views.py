@@ -5,8 +5,11 @@ from .utils import MealPlanSession
 from django.contrib import messages
 
 def product_list(request):
+    query = request.GET.get('q', '').strip()
     products = Product.objects.all()
-    return render(request, 'meals/product_list.html', {'products': products})
+    if query:
+        products = products.filter(name__icontains=query)
+    return render(request, 'meals/product_list.html', {'products': products, 'query': query})
 
 @require_POST
 def add_to_plan(request, product_id):
