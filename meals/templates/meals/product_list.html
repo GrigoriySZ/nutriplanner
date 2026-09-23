@@ -1,0 +1,26 @@
+{% extends "meals/base.html" %}
+{% block title %}Каталог продуктов | NutriaPlanner{% endblock %}
+
+{% block content %}
+    <h2>Каталог продуктов (КБЖУ указаны на 100 грамм)</h2>
+    <div>
+        {% for product in products %}
+            <div class="card-body">
+                <h5>{{ product.name }}</h5>
+                <ul>
+                    <li>Каллории: {{ product.calories }}</li>
+                    <li>Белки: {{ product.proteins }}</li>
+                    <li>Жиры: {{ product.fats }}</li>
+                    <li>Углеводы: {{ product.carbs }}</li>
+                </ul>
+                <form action="{% url 'add_to_plan' product.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="number" name="weight" value="100" min="1" step="1">
+                    <button type="submit">
+                        Добавить в рацион
+                    </button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
