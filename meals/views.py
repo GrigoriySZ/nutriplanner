@@ -23,4 +23,27 @@ def add_to_plan(request, product_id):
     meal_plan.add_or_update(product.id, weight)
     messages.success(request, f'Продукт {product.name} добавлен')
     
-    return redirect('product_list') 
+    return redirect('product_list')
+
+def meal_plan_detail(request):
+    meal_plan = MealPlanSession(request)
+    items, totals = meal_plan.get_item_and_totals()
+    context = {
+        'items': items,
+        'totals': totals
+    }
+    return render(request, 'meals/meal_plan.html', context)
+
+@require_POST
+def remove_from_plan(request, product_id):
+    meal_plan = MealPlanSession(request)
+    meal_plan.remove(product_id)
+    messages.info(request, 'Продукт удален из вашего рациона')
+    return redirect('meal_detail_plan')
+
+@require_POST
+def clear_plan(request):
+    meal_plan = MealPlanSession(request)
+    meal_plan.clear()
+    messages.info(request, 'Ваш рацион очищен полностью')
+    return redirect('meal_detail_plan')
